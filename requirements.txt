@@ -1,1 +1,5 @@
-kkprometheus-fastapi-instrumentator==7.0.0
+fastapi
+uvicorn
+httpx
+pytest
+prometheus-fastapi-instrumentator==7.0.0
