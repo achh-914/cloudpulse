@@ -1,24 +1,19 @@
 from fastapi import FastAPI
-from datetime import datetime, timezone
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI(
-    title="CloudPulse API",
-    description="Cloud infrastructure health and observability API",
-    version="0.1.0",
+    title="CloudPulse",
+    description="CloudPulse Observability Microservice",
+    version="1.0.0"
 )
 
+# Instrumenting FastAPI for Prometheus Metrics
+Instrumentator().instrument(app).expose(app)
 
 @app.get("/")
-def root():
-    return {
-        "service": "CloudPulse",
-        "status": "running",
-    }
-
+def read_root():
+    return {"message": "CloudPulse Service is active!"}
 
 @app.get("/health")
-def health():
-    return {
-        "status": "healthy",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-    }
+def health_check():
+    return {"status": "healthy", "database": "connected"}
