@@ -1,4 +1,70 @@
+name: CI/CD Pipeline
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Run Pytest & Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Run Pytest
+        run: |
+          PYTHONPATH=. pytest
+
+  security-scan:
+    name: Security & Vulnerability Scan
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build temporary image for scanning
+        run: |
+          docker build -t cloudpulse:scan .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.16.0
+        with:
+          image-ref: 'cloudpulse:scan'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'
+
+  docker-build:
+    name: Build & Tag Docker Image
+    needs: security-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Extract Git Commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build Docker Image with SHA Tag
+        run: |
+          docker build -t cloudpulse:${{ steps.vars.outputs.sha_short }} -t cloudpulse:latest .
+          echo "Docker image built successfully with tag: ${{ steps.vars.outputs.sha_short }}"
 
 name: CI/CD Pipeline
 
