@@ -8,9 +8,11 @@ on:
 
 jobs:
   test:
+    name: Run Pytest & Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -18,21 +20,40 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
           
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
-      - name: Run Tests with Pytest
+      - name: Run Pytest
         run: |
           PYTHONPATH=. pytest
 
-  docker-build:
+  security-scan:
+    name: Security & Quality Check
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Build Docker Image
+      - name: Run Gitleaks / Trivy placeholder
         run: |
-          docker build -t cloudpulse:latest .
+          echo "Security scan stage initialized. Ready for Trivy/Gitleaks integration."
+
+  docker-build:
+    name: Build & Tag Docker Image
+    needs: security-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Extract Git Commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build Docker Image with SHA Tag
+        run: |
+          docker build -t cloudpulse:${{ steps.vars.outputs.sha_short }} -t cloudpulse:latest .
+          echo "Docker image built successfully with tag: ${{ steps.vars.outputs.sha_short }}"
