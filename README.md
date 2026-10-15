@@ -1,6 +1,3 @@
-
-k
-
 # CloudPulse: Production-Ready Observability & CI/CD Pipeline
 
 ![CI/CD Pipeline](https://github.com/achh-914/cloudpulse/actions/workflows/ci.yml/badge.svg)
@@ -41,4 +38,4 @@ git clone [https://github.com/achh-914/cloudpulse.git](https://github.com/achh-9
 cd cloudpulse
 
 # Run the app and monitoring stack locally
-docker-compose up --build# cloudpulse
+docker-compose up --build
