@@ -1,13 +1,7 @@
-
-
 fastapi
 uvicorn
 httpx
 pytest
 pytest-cov
 flake8
-prometheus-fastapi-instrumentator==7.0.0fastapi
-uvicorn
-httpx
-pytest
 prometheus-fastapi-instrumentator==7.0.0
