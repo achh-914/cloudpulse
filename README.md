@@ -1,4 +1,4 @@
-# CloudPulse: Production-Ready Observability & CI/CD Pipeline
+# CloudPulse: Cloud Observability Microservice & CI/CD Pipeline
 
 ![CI/CD Pipeline](https://github.com/achh-914/cloudpulse/actions/workflows/ci.yml/badge.svg)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)
@@ -6,32 +6,41 @@
 ![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-e6522c?logo=prometheus)
 
 ## Overview
-CloudPulse is an enterprise-grade cloud observability microservice built with FastAPI, containerized via Docker, orchestrated using Docker Compose, and monitored through Prometheus. 
+CloudPulse is a cloud observability microservice built with FastAPI, containerized via Docker, orchestrated using Docker Compose, and monitored through Prometheus. 
 
-This project demonstrates professional DevOps methodologies, featuring a robust multi-stage GitHub Actions CI/CD pipeline, automated security scanning, and Git Commit SHA image tagging.
+This project demonstrates core DevOps and Cloud engineering methodologies, featuring a multi-stage GitHub Actions CI/CD pipeline with automated code quality checks (Linting), test coverage validation, security scanning, and Git Commit SHA image tagging.
 
 ---
 
 ## Architecture & Workflow
-1. Continuous Integration (CI): Automated code validation and testing using pytest.
-2. Security Vulnerability Scan: Automated codebase and dependency safety checks.
-3. Containerization & Versioning: Building production-ready Docker images tagged dynamically with Git Commit SHAs.
-4. Monitoring & Observability: Exposing native API metrics using prometheus-fastapi-instrumentator and scraping them via Prometheus.
+1. Code Quality & Linting: Automated syntax and style validation using Flake8.
+2. Continuous Integration (CI): Automated testing and coverage reporting using Pytest.
+3. Security Vulnerability Scan: Dependency and codebase safety checks.
+4. Containerization & Versioning: Production-ready Docker builds tagged dynamically with Git Commit SHAs.
+5. Monitoring & Observability: Exposing native API metrics using prometheus-fastapi-instrumentator and scraping them via Prometheus.
 
 ---
 
 ## Tech Stack
 * Language & Framework: Python 3.11, FastAPI
-* Testing: Pytest, TestClient
-* CI/CD & Automation: GitHub Actions
+* Testing & Quality: Pytest, pytest-cov, Flake8
+* CI/CD & Automation: GitHub Actions (with Fail-Fast Gates)
 * Containerization: Docker & Docker Compose
 * Observability: Prometheus
 
 ---
 
+## Scope & Limitations
+While this repository implements robust CI/CD, security gates, and monitoring workflows, it operates as a portfolio/demonstration project. True production readiness would further require:
+* Cloud-native orchestrators (e.g., Kubernetes / GKE) with managed ingress and auto-scaling.
+* Remote state management and locking for Infrastructure as Code (Terraform).
+* Advanced secrets management and centralized log aggregation.
+
+---
+
 ## Quickstart Guide (Local Deployment)
 
-Clone the repository and spin up the complete stack with a single command:
+Clone the repository and spin up the stack locally:
 
 ```bash
 git clone [https://github.com/achh-914/cloudpulse.git](https://github.com/achh-914/cloudpulse.git)
